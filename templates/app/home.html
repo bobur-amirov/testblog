@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %} {% if category %} {{ category.name }} {% else %} Blog {% endif %} {% endblock %}
+
+
+{% block content %}
+
+    {% for blog in blogs %}
+        <h2><a href="{% url 'app:blog_detail' blog.slug %}">{{ blog.title }}</a></h2>
+        <img src="{{ blog.image.url }}">
+        <p>{{ blog.text|truncatechars:100 }}</p>
+        <p>Author: {{ blog.author.username }} Date: {{ blog.created|date:"d.m.Y H:m" }}</p>
+    {% endfor %}
+    <hr>
+    {% if blogs.has_previous %}
+        <a href="?page={{ blogs.previous_page_number }}">prev</a>
+    {% endif %}
+    {% for i in blogs.paginator.page_range %}
+        <a href="?page={{ i }}">{{ i }}</a>
+    {% endfor %}
+    {% if blogs.has_next %}
+        <a href="?page={{ blogs.next_page_number }}">next</a>
+    {% endif %}
+
+{% endblock %}
